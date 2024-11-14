@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Chonburi&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <script src="sys.js"></script>
+    <title>ระบบสุ่มข้อความ</title>
+</head>
+
+<body>
+    <audio id="sound">
+        <source src="sfx/drum_roll.mp3" type="audio/mpeg">
+    </audio>
+    <div class="container">
+        <h1>ระบบสุ่มข้อความ</h1>
+        <div class="message-box" id="messageBox">กดปุ่มสุ่มข้อความ</div>
+        <button class="button" id="randomButton" onclick="toggleRandomMessage()">สุ่มข้อความ</button>
+        <input type="text" class="input-field" id="newMessageInput" placeholder="เพิ่มข้อความใหม่">
+        <button class="button add" onclick="addNewMessage()">เพิ่มข้อความ</button>
+        <button class="button delete" onclick="deleteAllMessages()">ลบข้อความทั้งหมด</button>
+        <div class="all-messages" id="allMessages">
+            <h3>ข้อความทั้งหมด:</h3>
+            <ul class="messageList" id="messageList"></ul>
+        </div>
+    </div>
+
+    <script>
+        // ข้อความที่ต้องการสุ่ม
+        let messages = ["สวัสดีครับ", "ยินดีต้อนรับ!", "วันนี้คุณยิ้มแล้วหรือยัง?", "ขอให้โชคดี!", "มีความสุขในทุก ๆ วันนะครับ"];
+        let intervalId = null;  // ตัวแปรสำหรับเก็บค่า interval
+        let isRandomizing = false; // ตัวแปรเช็คสถานะการสุ่มข้อความ
+        let play_sound_start = false;
+        let sound_reciever = document.getElementById("sound");
+
+        // ฟังก์ชันแสดงข้อความทั้งหมด
+        function displayAllMessages() {
+            const messageList = document.getElementById("messageList");
+            messageList.innerHTML = ""; // เคลียร์รายการเดิม
+            messages.forEach((message) => {
+                const li = document.createElement("li");
+                li.textContent = message;
+                messageList.appendChild(li);
+            });
+        }
+
+        // ฟังก์ชันเพิ่มข้อความใหม่ และแสดงผลแบบเรียลไทม์
+        function addNewMessage() {
+            const newMessage = document.getElementById("newMessageInput").value;
+            if (newMessage) {
+                messages.push(newMessage); // เพิ่มข้อความใหม่ลงใน array
+                document.getElementById("newMessageInput").value = ""; // เคลียร์ input
+                displayAllMessages(); // อัปเดตรายการทั้งหมด
+            } else {
+                alert("กรุณากรอกข้อความก่อน!");
+            }
+        }
+
+        // ฟังก์ชันสุ่มข้อความ
+        function showRandomMessage() {
+            const randomIndex = Math.floor(Math.random() * messages.length);
+            document.getElementById("messageBox").textContent = messages[randomIndex];
+        }
+
+        // ฟังก์ชันที่ใช้เปิด/ปิดการสุ่มข้อความ
+        function toggleRandomMessage() {
+            if (isRandomizing) {
+                clearInterval(intervalId);  // หยุดการสุ่มข้อความ
+                document.getElementById("randomButton").textContent = "สุ่มข้อความ";  // เปลี่ยนชื่อปุ่ม
+                isRandomizing = false;
+            } else {
+                intervalId = setInterval(() => {
+                    play_sound_start = true;
+                    if (play_sound_start) {
+                        sound_reciever.play();
+                        play_sound_start = false;
+                    }
+                    if (messages.length > 0) {
+                        showRandomMessage(); // สุ่มข้อความใหม่
+                    }
+                }, 50); // สุ่มข้อความทุก ๆ 1 วินาที
+                document.getElementById("randomButton").textContent = "หยุดสุ่มข้อความ";  // เปลี่ยนชื่อปุ่ม
+                isRandomizing = true;
+            }
+        }
+
+        function stopsound() {
+
+        }
+
+        // ฟังก์ชันลบข้อความทั้งหมด
+        function deleteAllMessages() {
+            messages = [];  // ลบข้อความทั้งหมดใน array
+            document.getElementById("messageBox").textContent = "ไม่มีข้อความ";  // รีเซ็ตข้อความในกล่อง
+            displayAllMessages();  // อัปเดตรายการข้อความทั้งหมด
+        }
+
+        // แสดงข้อความทั้งหมดในตอนเริ่มต้น
+        displayAllMessages();
+    </script>
+
+</body>
+
+</html>
