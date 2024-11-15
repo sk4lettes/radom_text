@@ -32,17 +32,15 @@
     </div>
 
     <script>
-        // ข้อความที่ต้องการสุ่ม
         let messages = ["สวัสดีครับ", "ยินดีต้อนรับ!", "วันนี้คุณยิ้มแล้วหรือยัง?", "ขอให้โชคดี!", "มีความสุขในทุก ๆ วันนะครับ"];
-        let intervalId = null;  // ตัวแปรสำหรับเก็บค่า interval
-        let isRandomizing = false; // ตัวแปรเช็คสถานะการสุ่มข้อความ
+        let intervalId = null;
+        let isRandomizing = false;
         let play_sound_start = false;
         let sound_reciever = document.getElementById("sound");
 
-        // ฟังก์ชันแสดงข้อความทั้งหมด
         function displayAllMessages() {
             const messageList = document.getElementById("messageList");
-            messageList.innerHTML = ""; // เคลียร์รายการเดิม
+            messageList.innerHTML = "";
             messages.forEach((message) => {
                 const li = document.createElement("li");
                 li.textContent = message;
@@ -50,29 +48,26 @@
             });
         }
 
-        // ฟังก์ชันเพิ่มข้อความใหม่ และแสดงผลแบบเรียลไทม์
         function addNewMessage() {
             const newMessage = document.getElementById("newMessageInput").value;
             if (newMessage) {
-                messages.push(newMessage); // เพิ่มข้อความใหม่ลงใน array
-                document.getElementById("newMessageInput").value = ""; // เคลียร์ input
-                displayAllMessages(); // อัปเดตรายการทั้งหมด
+                messages.push(newMessage);
+                document.getElementById("newMessageInput").value = "";
+                displayAllMessages();
             } else {
                 alert("กรุณากรอกข้อความก่อน!");
             }
         }
 
-        // ฟังก์ชันสุ่มข้อความ
         function showRandomMessage() {
             const randomIndex = Math.floor(Math.random() * messages.length);
             document.getElementById("messageBox").textContent = messages[randomIndex];
         }
 
-        // ฟังก์ชันที่ใช้เปิด/ปิดการสุ่มข้อความ
         function toggleRandomMessage() {
             if (isRandomizing) {
-                clearInterval(intervalId);  // หยุดการสุ่มข้อความ
-                document.getElementById("randomButton").textContent = "สุ่มข้อความ";  // เปลี่ยนชื่อปุ่ม
+                clearInterval(intervalId);
+                document.getElementById("randomButton").textContent = "สุ่มข้อความ";
                 isRandomizing = false;
             } else {
                 intervalId = setInterval(() => {
@@ -82,26 +77,20 @@
                         play_sound_start = false;
                     }
                     if (messages.length > 0) {
-                        showRandomMessage(); // สุ่มข้อความใหม่
+                        showRandomMessage();
                     }
-                }, 50); // สุ่มข้อความทุก ๆ 1 วินาที
-                document.getElementById("randomButton").textContent = "หยุดสุ่มข้อความ";  // เปลี่ยนชื่อปุ่ม
+                }, 50);
+                document.getElementById("randomButton").textContent = "หยุดสุ่มข้อความ";
                 isRandomizing = true;
             }
         }
 
-        function stopsound() {
-
-        }
-
-        // ฟังก์ชันลบข้อความทั้งหมด
         function deleteAllMessages() {
-            messages = [];  // ลบข้อความทั้งหมดใน array
-            document.getElementById("messageBox").textContent = "ไม่มีข้อความ";  // รีเซ็ตข้อความในกล่อง
-            displayAllMessages();  // อัปเดตรายการข้อความทั้งหมด
+            messages = [];
+            document.getElementById("messageBox").textContent = "ไม่มีข้อความ";
+            displayAllMessages();
         }
 
-        // แสดงข้อความทั้งหมดในตอนเริ่มต้น
         displayAllMessages();
     </script>
 
